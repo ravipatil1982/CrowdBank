@@ -2,8 +2,8 @@
 // import "../stylesheets/app.css"
 
 // Import libraries we need.
-import { default as Web3 } from 'web3'
-import { default as contract } from 'truffle-contract'
+import { Web3 } from 'web3'
+import { contract } from 'truffle-contract'
 import bank_artifacts from '../../build/contracts/CrowdBank.json'
 import bank_artifacts2 from '../../build/contracts/Mortgage.json'
 
@@ -26,19 +26,17 @@ var LOANSTATECLASS = {
   3: 'danger'
 }
 
-function LOANSTATEACTION (state, loanId) {
+function LOANSTATEACTION(state, loanId) {
   if (state === 0) {
     return '<button class="btn btn-danger" onclick="lockLoan(' + loanId + ')">LOCK</button>'
-  }
-  else if (state === 1) {
+  } else if (state === 1) {
     return '<button class="btn btn-success" onclick="repayLoan(' + loanId + ')">REPAY</button>'
-  }
-  else {
+  } else {
     return '-'
   }
 }
 
-function getLoanState () {
+function getLoanState() {
   CrowdBank.deployed().then(function (contractInstance) {
     console.log(account)
     contractInstance.getLastLoanState.call(account).then(function (loanState) {
@@ -49,7 +47,7 @@ function getLoanState () {
   })
 }
 
-function refreshPage () {
+function refreshPage() {
   location.reload()
 }
 
@@ -59,14 +57,12 @@ var getProposalClass = {
   2: 'danger'
 }
 
-function getProposalAction (proposalState, proposalId) {
-  if (proposalState == 0) {
+function getProposalAction(proposalState, proposalId) {
+  if (proposalState === 0) {
     return '<b><a onclick="acceptProposal(' + proposalId + ')">ACCEPT</a></b>'
-  }
-  else if (proposalState == 1) {
+  } else if (proposalState === 1) {
     return '<b>Accepted</b>'
-  }
-  else {
+  } else {
     return '<b>Repaid</b>'
   }
 }
@@ -87,12 +83,12 @@ window.showLoanDetails = function (loanId) {
         contractInstance.getRepayValue.call(loanId).then(function (result) {
           $('#loan-repay-amount').html(result.valueOf() / wtoE + ' eth')
         })
-      }
-      else {
+      } else {
         contractInstance.getRepayValue.call(loanId).then(function (result) {
           $('#loan-repay-amount').html('-')
         })
       }
+
       var proposalCount = (result[4].valueOf())
       $('#loan-proposal-count').html(proposalCount)
       $('#loan-proposal-details tbody').empty()
@@ -100,9 +96,9 @@ window.showLoanDetails = function (loanId) {
         contractInstance.getProposalDetailsByLoanIdPosition.call(loanId, i).then(function (el) {
           console.log(el)
           var newRowContent = '<tr class="' + getProposalClass[el[0].valueOf()] + '">\
-            <td>'+ (el[2].valueOf() / wtoE) + ' eth</td>\
-            <td>'+ el[1].valueOf() + '</td>\
-            <td>'+ getProposalAction(el[0].valueOf(), el[3].valueOf()) + '</td>\
+            <td>' + (el[2].valueOf() / wtoE) + ' eth</td>\
+            <td>' + el[1].valueOf() + '</td>\
+            <td>' + getProposalAction(el[0].valueOf(), el[3].valueOf()) + '</td>\
           </tr>'
           $('#loan-proposal-details tbody').prepend(newRowContent)
         })
@@ -134,7 +130,7 @@ window.repayLoan = function (loanId) {
   })
 }
 
-function showPastLoans () {
+function showPastLoans() {
   CrowdBank.deployed().then(function (contractInstance) {
     console.log('CONTRACT : ', contractInstance)
     console.log(account)
@@ -159,17 +155,15 @@ function showPastLoans () {
             $('#loan-rows tbody').prepend(newRowContent)
           })
         }
-      }
-      else {
+      } else {
         displayForm()
       }
     })
   })
 }
 
-function getMortgageDetails () {
+function getMortgageDetails() {
   Mortgage.deployed().then(function (contractInstance) {
-
     contractInstance.getMortgageCount.call(account).then(function (result) {
       var count = result.valueOf()
       console.log('MORTGAGE COUNT : ', count)
@@ -184,15 +178,20 @@ function getMortgageDetails () {
   })
 }
 
-function displayForm () {
+function displayForm() {
   getMortgageDetails()
   document.getElementById('newloan-form').style.display = 'block'
 }
 
-function newLoan (amount, date, mortgage) {
+function newLoan(amount, date, mortgage) {
   CrowdBank.deployed().then(function (contractInstance) {
     // contractInstance.defaultAccount = account
-    contractInstance.newLoan(web3.toWei(amount, 'ether'), date, mortgage, { gas: GAS_AMOUNT, from: account }).then(function () {
+    contractInstance.newLoan(
+      web3.toWei(amount, 'ether'),
+      date,
+      mortgage,
+      { gas: GAS_AMOUNT, from: account }
+    ).then(function () {
       refreshPage()
     })
   })
@@ -200,15 +199,18 @@ function newLoan (amount, date, mortgage) {
 
 $(document).ready(function () {
   if (typeof web3 !== 'undefined') {
-    console.warn('Using web3 detected from external source. If you find that your accounts do not appear or you have 0 MetaCoin',
-      + 'ensure you have configured that source properly. If using MetaMask, see the following link.'
-      + 'Feel free to delete this warning. : ) http://truffleframework.com/tutorials/truffle-and-metamask')
+    console.warn(
+      'Using web3 detected from external source. If you find that your accounts do not appear or you have 0 MetaCoin',
+      +'ensure you have configured that source properly. If using MetaMask, see the following link.'
+      +'Feel free to delete this warning. : ) http://truffleframework.com/tutorials/truffle-and-metamask')
     // Use Mist/MetaMask's provider
     window.web3 = new Web3(web3.currentProvider)
   } else {
-    console.warn("No web3 detected. Falling back to http://localhost:8545."
-      + "You should remove this fallback when you deploy live, as it's inherently insecure."
-      + "Consider switching to Metamask for development.More info here: http://truffleframework.com/tutorials/truffle-and-metamask")
+    console.warn(
+      'No web3 detected. Falling back to http://localhost:8545.'
+      +'You should remove this fallback when you deploy live, as its inherently insecure.'
+      +'Consider switching to Metamask for development.'
+      +'More info here: http://truffleframework.com/tutorials/truffle-and-metamask')
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     window.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
   }
@@ -237,10 +239,7 @@ $(document).ready(function () {
   Mortgage.setProvider(web3.currentProvider)
   CrowdBank.setProvider(web3.currentProvider)
   showPastLoans()
-
 })
-
-
 
 /*
 TO DO
