@@ -26,7 +26,7 @@ var LOANSTATECLASS = {
   3: 'danger'
 }
 
-function LOANSTATEACTION(state, loanId) {
+function LOANSTATEACTION (state, loanId) {
   if (state === 0) {
     return '<button class="btn btn-danger" onclick="lockLoan(' + loanId + ')">LOCK</button>'
   } else if (state === 1) {
@@ -36,7 +36,7 @@ function LOANSTATEACTION(state, loanId) {
   }
 }
 
-function getLoanState() {
+function getLoanState () {
   CrowdBank.deployed().then(function (contractInstance) {
     console.log(account)
     contractInstance.getLastLoanState.call(account).then(function (loanState) {
@@ -47,7 +47,7 @@ function getLoanState() {
   })
 }
 
-function refreshPage() {
+function refreshPage () {
   location.reload()
 }
 
@@ -120,7 +120,7 @@ window.lockLoan = function (loanId) {
 window.repayLoan = function (loanId) {
   CrowdBank.deployed().then(function (contractInstance) {
     contractInstance.getRepayValue.call(loanId).then(function (result) {
-      var amount = parseInt(result.valueOf()) + parseInt(web3.toWei(1, 'ether').valueOf())
+      var amount = parseInt(result.valueOf()) + parseInt(Web3.toWei(1, 'ether').valueOf())
       console.log(amount)
       contractInstance.repayLoan(loanId, { gas: GAS_AMOUNT, from: account, value: amount }).then(function () {
         console.log('REPAY DONE SUCCESSFULLY')
@@ -147,7 +147,7 @@ function showPastLoans() {
               <td>' + LOANSTATE[el[0].valueOf()] + '</td>\
               <td>' + new Date(el[1].valueOf() * 1000).toDateString() + '</td>\
               <td>' + el[2].valueOf() / wtoE + ' eth</td>\
-              <td><a target="_blank" href="http://mortgage.crowdbank.gov.in:8080/verify.html?hash=' + web3.toUtf8(el[5].valueOf()) + '">Link</a></td>\
+              <td><a target="_blank" href="http://mortgage.crowdbank.gov.in:8080/verify.html?hash=' + Web3.toUtf8(el[5].valueOf()) + '">Link</a></td>\
               <td>' + el[3].valueOf() / wtoE + ' eth</td>\
               <td><button class="btn btn-default" onclick="showLoanDetails(' + el[4].valueOf() + ')">Details</button></td>\
               <td>' + LOANSTATEACTION(el[0].valueOf(), el[4].valueOf()) + '</td>\
@@ -169,7 +169,7 @@ function getMortgageDetails() {
       console.log('MORTGAGE COUNT : ', count)
       for (let i = 0; i < count; i++) {
         contractInstance.mortgageMap(account, i).then(function (output) {
-          var mortgage = web3.toUtf8(output.valueOf())
+          var mortgage = Web3.toUtf8(output.valueOf())
           var newOption = '<option value="' + mortgage + '">' + mortgage + '</option>'
           $('#newloan-mortgage').append(newOption)
         })
@@ -187,7 +187,7 @@ function newLoan(amount, date, mortgage) {
   CrowdBank.deployed().then(function (contractInstance) {
     // contractInstance.defaultAccount = account
     contractInstance.newLoan(
-      web3.toWei(amount, 'ether'),
+      Web3.toWei(amount, 'ether'),
       date,
       mortgage,
       { gas: GAS_AMOUNT, from: account }
@@ -198,24 +198,24 @@ function newLoan(amount, date, mortgage) {
 }
 
 $(document).ready(function () {
-  if (typeof web3 !== 'undefined') {
+  if (typeof Web3 !== 'undefined') {
     console.warn(
       'Using web3 detected from external source. If you find that your accounts do not appear or you have 0 MetaCoin',
-      +'ensure you have configured that source properly. If using MetaMask, see the following link.'
-      +'Feel free to delete this warning. : ) http://truffleframework.com/tutorials/truffle-and-metamask')
+      + 'ensure you have configured that source properly. If using MetaMask, see the following link.'
+      + 'Feel free to delete this warning. : ) http://truffleframework.com/tutorials/truffle-and-metamask')
     // Use Mist/MetaMask's provider
-    window.web3 = new Web3(web3.currentProvider)
+    window.Web3 = new Web3(Web3.currentProvider)
   } else {
     console.warn(
       'No web3 detected. Falling back to http://localhost:8545.'
-      +'You should remove this fallback when you deploy live, as its inherently insecure.'
-      +'Consider switching to Metamask for development.'
-      +'More info here: http://truffleframework.com/tutorials/truffle-and-metamask')
+      + 'You should remove this fallback when you deploy live, as its inherently insecure.'
+      + 'Consider switching to Metamask for development.'
+      + 'More info here: http://truffleframework.com/tutorials/truffle-and-metamask')
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-    window.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
+    window.Web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
   }
 
-  web3.eth.getAccounts(function (err, accs) {
+  Web3.eth.getAccounts(function (err, accs) {
     wtoE = web3.toWei(1, 'ether')
     account = accs[0]
     $('#account-number').html(account)
@@ -236,8 +236,8 @@ $(document).ready(function () {
     newLoan(amount, date, mortgage)
   })
 
-  Mortgage.setProvider(web3.currentProvider)
-  CrowdBank.setProvider(web3.currentProvider)
+  Mortgage.setProvider(Web3.currentProvider)
+  CrowdBank.setProvider(Web3.currentProvider)
   showPastLoans()
 })
 
