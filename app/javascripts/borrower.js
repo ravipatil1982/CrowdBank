@@ -57,7 +57,7 @@ var getProposalClass = {
   2: 'danger'
 }
 
-function getProposalAction(proposalState, proposalId) {
+function getProposalAction (proposalState, proposalId) {
   if (proposalState === 0) {
     return '<b><a onclick="acceptProposal(' + proposalId + ')">ACCEPT</a></b>'
   } else if (proposalState === 1) {
@@ -95,11 +95,10 @@ window.showLoanDetails = function (loanId) {
       for (let i = 0; i < proposalCount; i++) {
         contractInstance.getProposalDetailsByLoanIdPosition.call(loanId, i).then(function (el) {
           console.log(el)
-          var newRowContent = '<tr class="' + getProposalClass[el[0].valueOf()] + '">\
-            <td>' + (el[2].valueOf() / wtoE) + ' eth</td>\
-            <td>' + el[1].valueOf() + '</td>\
-            <td>' + getProposalAction(el[0].valueOf(), el[3].valueOf()) + '</td>\
-          </tr>'
+          var newRowContent = '<tr class="' + getProposalClass[el[0].valueOf()] + '"><td>' +
+            (el[2].valueOf() / wtoE) + ' eth</td><td>' + el[1].valueOf() +
+            '</td><td>' + getProposalAction(el[0].valueOf(), el[3].valueOf()) +
+            '</td></tr>'
           $('#loan-proposal-details tbody').prepend(newRowContent)
         })
       }
@@ -130,7 +129,7 @@ window.repayLoan = function (loanId) {
   })
 }
 
-function showPastLoans() {
+function showPastLoans () {
   CrowdBank.deployed().then(function (contractInstance) {
     console.log('CONTRACT : ', contractInstance)
     console.log(account)
@@ -142,13 +141,14 @@ function showPastLoans() {
           contractInstance.getLoanDetailsByAddressPosition.call(account, i).then(function (el) {
             console.log(el[5].valueOf())
             console.log(el[5])
-            var newRowContent = '<tr class="' + LOANSTATECLASS[el[0].valueOf()] + '">\<td>' +
-              el[4].valueOf() + '</td>\ <td>' + LOANSTATE[el[0].valueOf()] + '</td>\
-              <td>' + new Date(el[1].valueOf() * 1000).toDateString() + '</td>\<td>' +
-              el[2].valueOf() / wtoE + ' eth</td>\ <td><a target="_blank" href="http://mortgage.crowdbank.gov.in:8080/verify.html?hash=' +
-              Web3.toUtf8(el[5].valueOf()) + '">Link</a></td>\<td>' + el[3].valueOf() / wtoE + 
-              ' eth</td>\<td><button class="btn btn-default" onclick="showLoanDetails(' +
-              el[4].valueOf() + ')">Details</button></td>\ <td>' +
+            var newRowContent = '<tr class="' + LOANSTATECLASS[el[0].valueOf()] + '"><td>' +
+              el[4].valueOf() + '</td>\ <td>' + LOANSTATE[el[0].valueOf()] + '</td><td>' +
+              new Date(el[1].valueOf() * 1000).toDateString() + '</td><td>' +
+              el[2].valueOf() / wtoE +
+              ' eth</td><td><a target="_blank" href="http://mortgage.crowdbank.gov.in:8080/verify.html?hash=' +
+              Web3.toUtf8(el[5].valueOf()) + '">Link</a></td><td>' + el[3].valueOf() / wtoE +
+              ' eth</td><td><button class="btn btn-default" onclick="showLoanDetails(' +
+              el[4].valueOf() + ')">Details</button></td><td>' +
               LOANSTATEACTION(el[0].valueOf(), el[4].valueOf()) + '</td>\</tr>'
             $('#loan-rows tbody').prepend(newRowContent)
           })
@@ -176,12 +176,12 @@ function getMortgageDetails() {
   })
 }
 
-function displayForm() {
+function displayForm () {
   getMortgageDetails()
   document.getElementById('newloan-form').style.display = 'block'
 }
 
-function newLoan(amount, date, mortgage) {
+function newLoan (amount, date, mortgage) {
   CrowdBank.deployed().then(function (contractInstance) {
     // contractInstance.defaultAccount = account
     contractInstance.newLoan(
@@ -198,8 +198,8 @@ function newLoan(amount, date, mortgage) {
 $(document).ready(function () {
   if (typeof Web3 !== 'undefined') {
     console.warn(
-      'Using web3 detected from external source. If you find that your accounts do not appear or you have 0 MetaCoin', + 
-      'ensure you have configured that source properly. If using MetaMask, see the following link.' + 
+      'Using web3 detected from external source. If you find that your accounts do not appear or you have 0 MetaCoin', +
+      'ensure you have configured that source properly. If using MetaMask, see the following link.' +
       'Feel free to delete this warning. : ) http://truffleframework.com/tutorials/truffle-and-metamask')
     // Use Mist/MetaMask's provider
     window.Web3 = new Web3(Web3.currentProvider)
