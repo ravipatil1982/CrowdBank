@@ -2,8 +2,7 @@
 // import "../stylesheets/landing-page.css";
 
 // Import libraries we need.
-import { default as Web3} from 'web3';
-import { default as contract } from 'truffle-contract'
+import { default as Web3 } from 'web3'
 
 // Import our contract artifacts and turn them into usable abstractions.
 // import metacoin_artifacts from '../../build/contracts/MetaCoin.json'
@@ -86,7 +85,7 @@ import { default as contract } from 'truffle-contract'
 //   }
 // };
 
-window.addEventListener('load', function() {
+window.addEventListener('load',function() {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof web3 !== 'undefined') {
     console.warn("Using web3 detected from external source. If you find that your accounts don't appear or you have 0 MetaCoin, ensure you've configured that source properly. If using MetaMask, see the following link. Feel free to delete this warning. :) http://truffleframework.com/tutorials/truffle-and-metamask")

@@ -142,14 +142,14 @@ function showPastLoans () {
             console.log(el[5].valueOf())
             console.log(el[5])
             var newRowContent = '<tr class="' + LOANSTATECLASS[el[0].valueOf()] + '"><td>' +
-              el[4].valueOf() + '</td>\ <td>' + LOANSTATE[el[0].valueOf()] + '</td><td>' +
+              el[4].valueOf() + '</td><td>' + LOANSTATE[el[0].valueOf()] + '</td><td>' +
               new Date(el[1].valueOf() * 1000).toDateString() + '</td><td>' +
               el[2].valueOf() / wtoE +
               ' eth</td><td><a target="_blank" href="http://mortgage.crowdbank.gov.in:8080/verify.html?hash=' +
               Web3.toUtf8(el[5].valueOf()) + '">Link</a></td><td>' + el[3].valueOf() / wtoE +
               ' eth</td><td><button class="btn btn-default" onclick="showLoanDetails(' +
               el[4].valueOf() + ')">Details</button></td><td>' +
-              LOANSTATEACTION(el[0].valueOf(), el[4].valueOf()) + '</td>\</tr>'
+              LOANSTATEACTION(el[0].valueOf(), el[4].valueOf()) + '</td></tr>'
             $('#loan-rows tbody').prepend(newRowContent)
           })
         }
