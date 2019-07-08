@@ -26,7 +26,7 @@ var LOANSTATECLASS = {
   3: 'danger'
 }
 
-function LOANSTATEACTION (state, loanId) {
+function LOANSTATEACTION(state, loanId) {
   if (state === 0) {
     return '<button class="btn btn-danger" onclick="lockLoan(' + loanId + ')">LOCK</button>'
   } else if (state === 1) {
@@ -36,7 +36,7 @@ function LOANSTATEACTION (state, loanId) {
   }
 }
 
-function getLoanState () {
+function getLoanState() {
   CrowdBank.deployed().then(function (contractInstance) {
     console.log(account)
     contractInstance.getLastLoanState.call(account).then(function (loanState) {
@@ -47,7 +47,7 @@ function getLoanState () {
   })
 }
 
-function refreshPage () {
+function refreshPage() {
   location.reload()
 }
 
@@ -142,16 +142,14 @@ function showPastLoans() {
           contractInstance.getLoanDetailsByAddressPosition.call(account, i).then(function (el) {
             console.log(el[5].valueOf())
             console.log(el[5])
-            var newRowContent = '<tr class="' + LOANSTATECLASS[el[0].valueOf()] + '">\
-              <td>' + el[4].valueOf() + '</td>\
-              <td>' + LOANSTATE[el[0].valueOf()] + '</td>\
-              <td>' + new Date(el[1].valueOf() * 1000).toDateString() + '</td>\
-              <td>' + el[2].valueOf() / wtoE + ' eth</td>\
-              <td><a target="_blank" href="http://mortgage.crowdbank.gov.in:8080/verify.html?hash=' + Web3.toUtf8(el[5].valueOf()) + '">Link</a></td>\
-              <td>' + el[3].valueOf() / wtoE + ' eth</td>\
-              <td><button class="btn btn-default" onclick="showLoanDetails(' + el[4].valueOf() + ')">Details</button></td>\
-              <td>' + LOANSTATEACTION(el[0].valueOf(), el[4].valueOf()) + '</td>\
-            </tr>'
+            var newRowContent = '<tr class="' + LOANSTATECLASS[el[0].valueOf()] + '">\<td>' +
+              el[4].valueOf() + '</td>\ <td>' + LOANSTATE[el[0].valueOf()] + '</td>\
+              <td>' + new Date(el[1].valueOf() * 1000).toDateString() + '</td>\<td>' +
+              el[2].valueOf() / wtoE + ' eth</td>\ <td><a target="_blank" href="http://mortgage.crowdbank.gov.in:8080/verify.html?hash=' +
+              Web3.toUtf8(el[5].valueOf()) + '">Link</a></td>\<td>' + el[3].valueOf() / wtoE + 
+              ' eth</td>\<td><button class="btn btn-default" onclick="showLoanDetails(' +
+              el[4].valueOf() + ')">Details</button></td>\ <td>' +
+              LOANSTATEACTION(el[0].valueOf(), el[4].valueOf()) + '</td>\</tr>'
             $('#loan-rows tbody').prepend(newRowContent)
           })
         }
@@ -200,17 +198,17 @@ function newLoan(amount, date, mortgage) {
 $(document).ready(function () {
   if (typeof Web3 !== 'undefined') {
     console.warn(
-      'Using web3 detected from external source. If you find that your accounts do not appear or you have 0 MetaCoin',
-      + 'ensure you have configured that source properly. If using MetaMask, see the following link.'
-      + 'Feel free to delete this warning. : ) http://truffleframework.com/tutorials/truffle-and-metamask')
+      'Using web3 detected from external source. If you find that your accounts do not appear or you have 0 MetaCoin', + 
+      'ensure you have configured that source properly. If using MetaMask, see the following link.' + 
+      'Feel free to delete this warning. : ) http://truffleframework.com/tutorials/truffle-and-metamask')
     // Use Mist/MetaMask's provider
     window.Web3 = new Web3(Web3.currentProvider)
   } else {
     console.warn(
-      'No web3 detected. Falling back to http://localhost:8545.'
-      + 'You should remove this fallback when you deploy live, as its inherently insecure.'
-      + 'Consider switching to Metamask for development.'
-      + 'More info here: http://truffleframework.com/tutorials/truffle-and-metamask')
+      'No web3 detected. Falling back to http://localhost:8545.' +
+      'You should remove this fallback when you deploy live, as its inherently insecure.' +
+      'Consider switching to Metamask for development.' +
+      'More info here: http://truffleframework.com/tutorials/truffle-and-metamask')
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     window.Web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
   }
