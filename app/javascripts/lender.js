@@ -52,17 +52,17 @@ function populateProposals() {
         contractInstance.getProposalAtPosFor.call(account, i).then(function (el) {
           var buttonHTML
           if (el[2].valueOf() === 0) {
-            buttonHTML = "<button class='btn btn-danger' onclick='revokeProposal(" + (curpos++) + ")'>x</button>"
+            buttonHTML = '<button class="btn btn-danger" onclick="revokeProposal(' + (curpos++) + ')">x</button>'
           } else {
-            buttonHTML = "--"
+            buttonHTML = '--'
           }
 
           $('#proposal-rows').append("<tr id='proposal" + i + "'><td>" +
-            el[1].valueOf() + "</td><td>" + el[5].valueOf() / wtoE +
-            " eth</td><td>" + new Date(el[6].valueOf() * 1000).toDateString() +
-            "</td><td><a target='_blank' href='http://mortgage.crowdbank.gov.in:8080/verify.html?hash=" + web3.toUtf8(el[7].valueOf()) + "'>Link</a></td><td>" +
-            PROPOSALSTATE[el[2].valueOf()] + "</td><td>" + el[3].valueOf() +
-            "</td><td>" + el[4].valueOf() / wtoE + "</td><td>" + buttonHTML + "</td></tr>")
+            el[1].valueOf() + '</td><td>' + el[5].valueOf() / wtoE +
+            ' eth</td><td>' + new Date(el[6].valueOf() * 1000).toDateString() +
+            '</td><td><a target="_blank" href="http://mortgage.crowdbank.gov.in:8080/verify.html?hash=' + web3.toUtf8(el[7].valueOf()) + '">Link</a></td><td>' +
+            PROPOSALSTATE[el[2].valueOf()] + '</td><td>' + el[3].valueOf() +
+            '</td><td>' + el[4].valueOf() / wtoE + '</td><td>' + buttonHTML + '</td></tr>')
         })
       }
     })
@@ -72,9 +72,9 @@ function populateProposals() {
 window.proposeLend = function (id) {
   var amount = $('#lendinput' + id).val()
   var rate = $('#lendrate' + id).val()
-  console.log("Lending " + amount + " Ether to LoanId " + id)
+  console.log('Lending ' + amount + ' Ether to LoanId ' + id)
   CrowdBank.deployed().then(function (contractInstance) {
-    contractInstance.newProposal(id, rate, { value: web3.toWei(amount, 'ether'), from: account, gas: 2000000 }).then(function (transaction) {
+  contractInstance.newProposal(id, rate, { value: web3.toWei(amount, 'ether'), from: account, gas: 2000000 }).then(function (transaction) {
       console.log(transaction)
       refreshPage()
     })
@@ -99,17 +99,17 @@ function populateRecentLoans() {
             btnHTML = "<button class='btn btn-success' onclick='proposeLend(" + loanId + ")'>✔</button>"
           }
           else {
-            amountHTML = "-"
-            rateHTML = "-"
-            btnHTML = "-"
+            amountHTML = '-'
+            rateHTML = '-'
+            btnHTML = '-'
           }
           $("#recent-loan-rows").append("<tr class='" + LOANSTATECLASS[el[1].valueOf()] + "'><td>" +
-            (numLoans - 1 - (ccount++)) + "</td><td>" + el[0].valueOf() + "</td><td>" +
-            LOANSTATE[el[1].valueOf()] + "</td><td>" + new Date(el[2].valueOf() * 1000).toDateString() +
-            "</td><td>" + el[3].valueOf() / wtoE +
-            "</td><td><a target='_blank' href='http://mortgage.crowdbank.gov.in:8080/verify.html?hash=" +
-            web3.toUtf8(el[7].valueOf()) + "'>Link</a></td>\<td>" + amountHTML + "</td><td>" +
-            rateHTML + "</td><td>" + btnHTML + "</td><tr>")
+            (numLoans - 1 - (ccount++)) + '</td><td>' + el[0].valueOf() + '</td><td>' +
+            LOANSTATE[el[1].valueOf()] + '</td><td>' + new Date(el[2].valueOf() * 1000).toDateString() +
+            '</td><td>' + el[3].valueOf() / wtoE +
+            '</td><td><a target="_blank" href="http://mortgage.crowdbank.gov.in:8080/verify.html?hash=' +
+            web3.toUtf8(el[7].valueOf()) + '">Link</a></td>\<td>' + amountHTML + '</td><td>' +
+            rateHTML + '</td><td>' + btnHTML + '</td><tr>')
         })
       }
     })
@@ -145,15 +145,16 @@ function refreshPage() {
 
 $(document).ready(function () {
   if (typeof web3 !== 'undefined') {
-    console.warn("Using web3 detected from external source. If you find that your accounts don't appear or you" +
-      "have 0 MetaCoin, ensure you've configured that source properly. If using MetaMask, see the following"+ "link. Feel free to delete this warning. :) http://truffleframework.com/tutorials/truffle-and-metamask")
+    console.warn('Using web3 detected from external source. If you find that your accounts do not appear ' +
+      "or you have 0 MetaCoin, ensure you've configured that source properly. If using MetaMask, see the " +
+      "following link. Feel free to delete this warning. :) http://truffleframework.com/tutorials/truffle-and-metamask")
     // Use Mist/MetaMask's provider
     window.web3 = new Web3(web3.currentProvider)
   } else {
-    console.warn("No web3 detected. Falling back to http://localhost:8545." +
-      "You should remove this fallback when you deploy live, as it's inherently insecure. " +
-      "Consider switching to Metamask for development.More info here:" +
-      "http://truffleframework.com/tutorials/truffle-and-metamask")
+    console.warn('No web3 detected. Falling back to http://localhost:8545.' +
+      'You should remove this fallback when you deploy live, as its inherently insecure. ' +
+      'Consider switching to Metamask for development.More info here:' +
+      'http://truffleframework.com/tutorials/truffle-and-metamask')
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
   }
